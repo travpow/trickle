@@ -1,0 +1,15 @@
+
+# Mac debug symbols
+*.dSYM
+
+# Vim
+*.swp
+*/**/.swp
+*/**/.swo
+
+# Dependencies
+Catch/
+
+# Target
+bin/**
+**/bin/**
