@@ -31,7 +31,7 @@ $(TARGET): $(BIN)
 	@$(CXX) -shared -o $(BIN)/$(TARGET) $(SRCS)
 
 $(TEST): $(TESTBIN)
-	$(CXX) -o $(TESTBIN)/$(TEST) $(TESTSRCS) -L./$(BIN) -l:trickle.so
+	$(CXX) -o $(TESTBIN)/$(TEST) $(TESTSRCS) -L./$(BIN) -l:$(TARGET)
 
 .PHONY: test
 
