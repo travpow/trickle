@@ -26,3 +26,24 @@ const Cell& TrRow::get(int pos) const
 {
     return cells_[pos];
 }
+
+std::ostream& operator <<(std::ostream& stream, const TrRow& row)
+{
+    bool hasPrinted = false;
+
+    stream << "Row[";
+
+    for (auto itr = row.cells_.begin();
+        itr != row.cells_.end(); ++itr)
+    {
+        if (hasPrinted)
+            stream << ',';
+
+        stream << *itr;
+        hasPrinted = true;
+    }
+
+    stream << ']';
+
+    return stream;
+}

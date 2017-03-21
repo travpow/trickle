@@ -26,7 +26,7 @@ TEST_CASE("asdf") {
         {"badcol", "unknownType"}
     };
 
-    TrSchema schema(types, columns);
+    TrSchema schema(types, columns, "name");
 
     REQUIRE(schema.pos("birthday") == 3);
     REQUIRE(schema.type("birthday") == types.map["date"]);

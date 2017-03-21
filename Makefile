@@ -12,6 +12,7 @@ SRCS = \
 
 TESTSRCS = \
     test/test_main.cpp \
+    test/test_Table.cpp \
     test/test_initialize.cpp \
 
 CATCH = Catch/include/catch.hpp

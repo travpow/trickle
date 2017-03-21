@@ -12,7 +12,8 @@ using std::string;
 using std::endl;
 using Tr::TypeDefinitions;
 
-TrSchema::TrSchema(const TypeDefinitions& types, const vector<pair<string, string> >& columns)
+TrSchema::TrSchema(const TypeDefinitions& types, const vector<pair<string, string> >& columns, const string& primaryKey)
+    : primaryKey_(primaryKey)
 {
     for (int i = 0; i < columns.size(); ++i)
     {
@@ -27,6 +28,11 @@ TrSchema::TrSchema(const TypeDefinitions& types, const vector<pair<string, strin
 
         columns_[columnName] = typeItr->second;
         pos_[columnName] = i;
+    }
+
+    if (columns_.find(primaryKey) == columns_.end())
+    {
+        TRERROR << "Invalid primary key [" << primaryKey << " not a column in the column list!" << endl;
     }
 }
 

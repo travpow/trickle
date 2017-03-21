@@ -11,8 +11,10 @@
 
 class TrSchema
 {
+using VectorOfPairs = std::vector<std::pair<std::string, std::string> >;
+
 public:
-    TrSchema(const Tr::TypeDefinitions& types, const std::vector<std::pair<std::string, std::string> >& columns);
+    TrSchema(const Tr::TypeDefinitions& types, const VectorOfPairs& columns, const std::string& primaryKey);
 
     const Tr::Type* type(const std::string& column) const;
     int pos(const std::string& column) const;

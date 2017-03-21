@@ -14,19 +14,22 @@ class TrPipeline;
 
 class TrTable
 {
+    template<typename Row>
+    using RowList = std::list<std::shared_ptr<Row> >;
+
+    template<typename Value, typename Row>
+    using Index = std::map<Value, RowList<Row> >;
+
 public:
     TrTable(const TrSchema& schema, const std::set<std::string>& indices);
 
     void insert(const std::vector<Tr::Cell>& row);
     void removeByPrimaryKey(const Tr::Cell& primaryKey);
+    const std::list<std::shared_ptr<TrRow> >& getByIndex(const std::string& indexName, const Tr::Cell& value);
 
 private:
     const TrSchema& schema_;
     std::set<std::string> indiceNames_;
-
-    template<typename Value, typename Row>
-    using Index = std::map<Value, std::list<std::shared_ptr<Row> > >;
-
     Index<time_t, TrRow> rows_;
     std::map<std::string, Index<Tr::Cell, TrRow> > indices_; 
     std::set<TrPipeline*> downstream_;

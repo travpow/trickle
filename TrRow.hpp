@@ -4,6 +4,8 @@
 #define TRROW_HPP
 
 #include <vector>
+#include <iostream>
+#include <set>
 #include "TrCell.hpp"
 #include "TrSchema.hpp"
 
@@ -17,8 +19,12 @@ public:
     const Tr::Cell& get(int pos) const;
 
 private:
+    friend std::ostream& operator <<(std::ostream& stream, const TrRow& row);
+
     time_t timestamp_;
     std::vector<Tr::Cell> cells_;
 };
+
+std::ostream& operator <<(std::ostream& stream, const TrRow& row);
 
 #endif // TRROW_HPP

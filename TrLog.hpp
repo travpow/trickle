@@ -7,11 +7,14 @@
 #include <iostream>
 #include <ctime>
 #include <cstdint>
+#include <iomanip>
 #include <pthread.h>
 
 
 namespace Tr {
 namespace Log {
+
+static const char* TimeFormat = "%c %Z";
 
 #ifdef LINUX
 static thread_local pid_t TID = gettid();
@@ -24,7 +27,7 @@ static uint64_t getTID()
     return tid;
 }
 
-static thread_local uint64_t TID = getTID(); 
+static thread_local uint64_t TID = getTID();
 #endif
 
 }
@@ -33,7 +36,7 @@ static thread_local uint64_t TID = getTID();
 #define TRLOGTIME(STREAM) \
     { \
         std::time_t result = std::time(nullptr); \
-        STREAM << std::asctime(std::localtime(&result)); \
+        STREAM << std::put_time(std::localtime(&result), Tr::Log::TimeFormat); \
     } \
 
 #define TRERROR \

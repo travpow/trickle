@@ -2,6 +2,7 @@
 #include <set>
 #include <string>
 #include <vector>
+#include <list>
 #include <memory>
 #include <iostream>
 #include <algorithm>
@@ -13,6 +14,7 @@
 
 using std::find;
 using std::set;
+using std::list;
 using std::string;
 using std::vector;
 using std::shared_ptr;
@@ -45,6 +47,7 @@ void TrTable::removeByPrimaryKey(const Cell& primaryKey)
 {
     int primaryPos = schema_.pos(schema_.primaryKey());
     auto primaryIndex = indices_[schema_.primaryKey()];
+
     auto itr = primaryIndex.find(primaryKey);
 
     if (itr == primaryIndex.end())
@@ -62,9 +65,9 @@ void TrTable::removeByPrimaryKey(const Cell& primaryKey)
     static const char* timeIndex = "(timestamp)";
     removeRowFromIndex(timeIndex, rows_, row, row->timestamp());
 
-    for (auto itr = indiceNames_.begin(); itr != indiceNames_.end(); ++itr)
+    for (auto idx = indiceNames_.begin(); idx != indiceNames_.end(); ++idx)
     {
-        const string& indexName = *itr;
+        const string& indexName = *idx;
         int columnPos = schema_.pos(indexName);
 
         if (columnPos == primaryPos)
@@ -90,7 +93,7 @@ void TrTable::removeRowFromIndex(const string& indexName, TrTable::Index<Key, Tr
         return;
     }
 
-    auto bucket = itr->second;
+    auto& bucket = itr->second;
     auto indexItr = find(bucket.begin(), bucket.end(), row);
 
     if (indexItr == bucket.end())
@@ -101,10 +104,35 @@ void TrTable::removeRowFromIndex(const string& indexName, TrTable::Index<Key, Tr
         return;
     }
 
+    TRINFO << "Removing row from table for index [" << indexName
+        << "]:" << *row << endl;
+
     bucket.erase(indexItr);
 
     if (bucket.empty())
     {
         index.erase(itr);
     }
+}
+
+const list<shared_ptr<TrRow> >& TrTable::getByIndex(const string& indexName, const Tr::Cell& value)
+{
+    static const list<shared_ptr<TrRow> > emptyList;
+
+    auto itr = indices_.find(indexName);
+
+    if (itr == indices_.end())
+    {
+        TRERROR << "Index not found [" << indexName << ']' << endl;
+        return emptyList;
+    }
+
+    auto lookup = itr->second.find(value);
+
+    if (lookup == itr->second.end())
+    {
+        return emptyList;
+    }
+
+    return lookup->second;
 }
