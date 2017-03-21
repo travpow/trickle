@@ -31,6 +31,21 @@ struct TypeDefinitions
 {
     TypeMap map;
     TypeList list;
+
+    ~TypeDefinitions()
+    {
+        for (auto itr = list.begin(); itr != list.end(); ++itr)
+        {
+            delete *itr;
+        }
+    }
+
+    void addType(const char* name)
+    {
+        Type* type = new Type(name);
+        map[name] = type;
+        list.push_back(type);
+    }
 };
 
 static Type NoneType("none");
@@ -43,10 +58,15 @@ public:
     {
     }
 
-    TypeDefinitions* createTypes() const
+    TypeDefinitions createTypes() const
     {
-        int i = 0;
-        TypeDefinitions* td = new TypeDefinitions();
+        TypeDefinitions td;
+        td.addType("int32");
+        td.addType("int64");
+        td.addType("double");
+        td.addType("string");
+        td.addType("date");
+        td.addType("interval");
 
         return td;
     }
@@ -57,4 +77,4 @@ private:
 
 } // Tr
 
-#endif
+#endif // TRTYPE_HPP

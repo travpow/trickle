@@ -12,13 +12,15 @@
 class TrSchema
 {
 public:
-    TrSchema(const Tr::TypeMap& typeMap, const std::vector<std::pair<std::string, std::string> >& columns);
+    TrSchema(const Tr::TypeDefinitions& types, const std::vector<std::pair<std::string, std::string> >& columns);
 
     const Tr::Type* type(const std::string& column) const;
-    size_t pos(const std::string& column) const;
+    int pos(const std::string& column) const;
+    const std::string& primaryKey() const;
 private:
     std::map<std::string, const Tr::Type*> columns_;
-    std::map<std::string, size_t> pos_;
+    std::map<std::string, int> pos_;
+    std::string primaryKey_;
 };
 
 #endif // TRSCHEMA_HPP

@@ -10,4 +10,7 @@ TrResources::TrResources()
 {
 }
 
-
+const Tr::TypeFactory* TrResources::typeFactory() const
+{
+    return typeFactory_;
+}

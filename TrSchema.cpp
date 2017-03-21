@@ -10,16 +10,16 @@ using std::vector;
 using std::pair;
 using std::string;
 using std::endl;
-using Tr::TypeMap;
+using Tr::TypeDefinitions;
 
-TrSchema::TrSchema(const TypeMap& typeMap, const vector<pair<string, string> >& columns)
+TrSchema::TrSchema(const TypeDefinitions& types, const vector<pair<string, string> >& columns)
 {
     for (int i = 0; i < columns.size(); ++i)
     {
         const string& columnName = columns[i].first;
 
-        auto typeItr = typeMap.find(columns[i].second);
-        if (typeItr == typeMap.end())
+        auto typeItr = types.map.find(columns[i].second);
+        if (typeItr == types.map.end())
         {
             TRERROR << "Could not find a type [" << columns[i].second << "] for column [" << columns[i].first << ']' << endl;
             continue;
@@ -41,7 +41,7 @@ const Tr::Type* TrSchema::type(const string& column) const
     return itr->second;
 }
 
-size_t TrSchema::pos(const string& column) const
+int TrSchema::pos(const string& column) const
 {
     auto itr = pos_.find(column);
     if (itr == pos_.end())
@@ -50,4 +50,9 @@ size_t TrSchema::pos(const string& column) const
     }
 
     return itr->second;
+}
+
+const string& TrSchema::primaryKey() const
+{
+    return primaryKey_;
 }
