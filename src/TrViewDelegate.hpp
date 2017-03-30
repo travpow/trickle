@@ -11,7 +11,7 @@ public:
     {
     }
 
-    virtual void append(const std::shared_ptr<const TrRow>& row) = 0;
+    virtual void append(const TrRow& row) = 0;
 };
 
 #endif // TRVIEWDELEGATE_HPP

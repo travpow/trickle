@@ -30,7 +30,7 @@ TrTable::TrTable(const TrSchema& schema, const set<string>& indices)
 
 void TrTable::insert(const vector<Cell>& cells)
 {
-    shared_ptr<TrRow> row(new TrRow(cells));
+    shared_ptr<const TrRow> row(new TrRow(cells));
 
     rows_[row->timestamp()].push_back(row);
 
@@ -64,7 +64,7 @@ void TrTable::removeByPrimaryKey(const Cell& primaryKey)
     }
 
     // Keep a ptr to the found row
-    shared_ptr<TrRow> row = itr->second.front();
+    shared_ptr<const TrRow> row = itr->second.front();
     const_cast<Index<Tr::Cell, TrRow>*>(primaryIndex)->erase(itr);
 
     static const char* timeIndex = "(timestamp)";
@@ -87,7 +87,7 @@ void TrTable::removeByPrimaryKey(const Cell& primaryKey)
 }
 
 template <typename Key>
-void TrTable::removeRowFromIndex(const string& indexName, TrTable::Index<Key, TrRow>& index, const shared_ptr<TrRow>& row, const Key& key)
+void TrTable::removeRowFromIndex(const string& indexName, TrTable::Index<Key, TrRow>& index, shared_ptr<const TrRow>& row, const Key& key)
 {
     auto itr = index.find(key);
     if (itr == index.end())
@@ -120,9 +120,9 @@ void TrTable::removeRowFromIndex(const string& indexName, TrTable::Index<Key, Tr
     }
 }
 
-const list<shared_ptr<TrRow> >& TrTable::getByIndex(const string& indexName, const Tr::Cell& value)
+const list<shared_ptr<const TrRow> >& TrTable::getByIndex(const string& indexName, const Tr::Cell& value)
 {
-    static const list<shared_ptr<TrRow> > emptyList;
+    static const list<shared_ptr<const TrRow> > emptyList;
 
     auto* index= getIndex(indexName);
     if (!index)

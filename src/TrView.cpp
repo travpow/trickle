@@ -51,19 +51,23 @@ void TrView::snap()
 
     if (!begin_)
     {
-        for (auto outer = index->begin(); outer != index->end(); ++outer)
+        for (auto outer = index->begin();
+            outer != index->end();
+            ++outer)
         {
             if (!begin_)
                 begin_ = outer->first;
 
             int index = 0;
 
-            for (auto inner = outer->second.begin(); inner != outer->second.end(); ++inner, ++index)
+            for (auto inner = outer->second.begin();
+                inner != outer->second.end();
+                ++inner, ++index)
             {
                 if (beginIndex_ < 0)
                     beginIndex_ = index;
 
-                viewDelegate_->append(*inner); 
+                viewDelegate_->append(**inner); 
                 remaining--;
 
                 if (remaining == 0)

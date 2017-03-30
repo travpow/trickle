@@ -42,7 +42,13 @@ public:
         return stream;
     }
 
+    bool operator ==(const T& rhs)
+    {
+        return value_ == rhs;
+    }
+
 private:
+
     T value_;
 };
 

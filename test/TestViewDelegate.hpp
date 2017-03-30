@@ -1,33 +1,30 @@
 
 
 #include <iostream>
+#include <memory>
+#include "TrRow.hpp"
 
 class TestViewDelegate : public TrViewDelegate
 {
-    using Vec = std::vector<const std::shared_ptr<const TrRow> >;
+    using Vec = std::vector<const TrRow>;
 
 public:
-    TestViewDelegate()
-        : rows_(100)
-    {
-    }
-
     virtual ~TestViewDelegate()
     {
     }
 
-    virtual void append(const std::shared_ptr<const TrRow>& row)
+    virtual void append(const TrRow& row)
     {
-        std::cout << "Row " << *row << std::endl;
+        std::cout << "TestViewDelegate: " << row << std::endl;
         rows_.push_back(row);
     }
 
-    Vec::const_iterator begin() const
+    Vec::const_iterator begin()
     {
         return rows_.begin();
     }
 
-    Vec::const_iterator end() const
+    Vec::const_iterator end()
     {
         return rows_.end();
     }

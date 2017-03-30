@@ -45,7 +45,7 @@ $(TARGET): $(SRCS) | $(BIN)
 	@$(CXX) $(SHAREDFLAGS) -o $(BIN)/$(TARGET) -I$(SRCDIR) $(SRCS)
 
 $(TEST): $(TESTSRCS) | $(TESTBIN)
-	@$(CXX) -o $(TESTBIN)/$(TEST) $(TESTSRCS) -I$(SRCDIR) -L$(DIR)/$(BIN) -ltrickle
+	@$(CXX) -g -o $(TESTBIN)/$(TEST) $(TESTSRCS) -I$(SRCDIR) -L$(DIR)/$(BIN) -ltrickle
 
 clean:
 	@find $(DIR) -name $(BIN) -exec rm -r {} \; 2>/dev/null || true ;

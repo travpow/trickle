@@ -1,5 +1,6 @@
 
 #include <utility>
+#include <memory>
 #include <vector>
 #include <string>
 
@@ -15,6 +16,7 @@
 
 #include "Catch-master/include/catch.hpp"
 
+using std::shared_ptr;
 using std::vector;
 using std::pair;
 using std::string;
@@ -52,11 +54,15 @@ TEST_CASE("Creation of view and insertion of rows") {
 
     view.snap();
 
+    REQUIRE(d.size() == 100);
+
     int i = 0;
-    for (auto itr = d.begin(); itr != d.end() && i < 200; ++itr, i += 2)
+    const int indexPos = schema.pos("index");
+
+    for (auto itr = d.begin(); itr != d.end(); ++itr, i += 2)
     {
-        const Cell& cell = (*itr)->get(1);
-        REQUIRE(cell == i);
+        const Tr::Cell& cell = itr->get(indexPos);
+        REQUIRE(cell == Cell(new Tr::Int32(i)));
     } 
 
     REQUIRE(i == 200);

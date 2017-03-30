@@ -16,7 +16,7 @@ class TrView;
 class TrTable
 {
     template<typename Row>
-    using RowList = std::list<std::shared_ptr<Row> >;
+    using RowList = std::list<std::shared_ptr<const Row> >;
 
     template<typename Value, typename Row>
     using Index = std::map<Value, RowList<Row> >;
@@ -46,7 +46,7 @@ private:
 
     template <typename Key>
     void removeRowFromIndex(const std::string& indexName, Index<Key, TrRow>& index,
-        const std::shared_ptr<TrRow>& row, const Key& key);
+        std::shared_ptr<const TrRow>& row, const Key& key);
 };
 
 #endif // TRTABLE_HPP
