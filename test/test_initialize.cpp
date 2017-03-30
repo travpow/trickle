@@ -7,7 +7,7 @@
 #include "TrType.hpp"
 #include "TrSchema.hpp"
 
-#include "Catch/include/catch.hpp"
+#include "Catch-master/include/catch.hpp"
 
 using std::vector;
 using std::pair;
@@ -31,5 +31,5 @@ TEST_CASE("asdf") {
     REQUIRE(schema.pos("birthday") == 3);
     REQUIRE(schema.type("birthday") == types.map["date"]);
     REQUIRE(schema.pos("badcol") == -1);
-    REQUIRE(schema.type("badcol") == &Tr::NoneType);
+    REQUIRE(schema.type("badcol")->name() == "none");
 }

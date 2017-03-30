@@ -1,30 +1,38 @@
 
+include std_makevars
 
 TARGET = libtrickle.so
 TEST = test_trickle
 
-SRCS = \
+DIR = $(shell pwd)
+BIN = bin
+SRCDIR = src
+TESTDIR = test
+TESTBIN = $(TESTDIR)/$(BIN)
+
+SRCS_F = \
     TrSchema.cpp \
     TrResources.cpp \
     TrRow.cpp \
     TrTable.cpp \
     TrCell.cpp \
+    TrView.cpp \
 
-TESTSRCS = \
-    test/test_main.cpp \
-    test/test_Table.cpp \
-    test/test_initialize.cpp \
+TESTSRCS_F = \
+    test_main.cpp \
+    test_Table.cpp \
+    test_initialize.cpp \
 
-CATCH = Catch/include/catch.hpp
+SRCS = $(addprefix $(SRCDIR)/,$(SRCS_F))
+TESTSRCS = $(addprefix $(TESTDIR)/,$(TESTSRCS_F))
 
-DIR = $(shell pwd)
-BIN = bin
-TESTBIN = test/$(BIN)
+CATCH = Catch-master/include/catch.hpp
+
 CXX = g++ -g -std=c++11 -I $(DIR)
 SHAREDFLAGS = -g -fPIC -dynamiclib -shared
 
 $(CATCH):
-	git clone https://github.com/philsquared/Catch.git
+	$(call github,philsquared,Catch)
 
 $(BIN):
 	@mkdir $(BIN)
@@ -32,19 +40,17 @@ $(BIN):
 $(TESTBIN):
 	@mkdir $(TESTBIN)
 
-$(TARGET): $(BIN)
-	@$(CXX) $(SHAREDFLAGS) -o $(BIN)/$(TARGET) $(SRCS)
+$(TARGET): $(SRCS) | $(BIN)
+	@$(CXX) $(SHAREDFLAGS) -o $(BIN)/$(TARGET) -I$(SRCDIR) $(SRCS)
 
-$(TEST): $(TESTBIN)
-	@$(CXX) -o $(TESTBIN)/$(TEST) $(TESTSRCS) -L$(DIR)/$(BIN) -ltrickle
-
-.PHONY: test
+$(TEST): $(TESTSRCS) | $(TESTBIN)
+	@$(CXX) -o $(TESTBIN)/$(TEST) $(TESTSRCS) -I$(SRCDIR) -L$(DIR)/$(BIN) -ltrickle
 
 clean:
 	@find $(DIR) -name $(BIN) -exec rm -r {} \; 2>/dev/null || true ;
 
-test: clean $(CATCH) $(TARGET) $(TEST)
-	./$(TESTBIN)/$(TEST)
+test: $(TARGET) $(TEST) | $(CATCH)
+	@./$(TESTBIN)/$(TEST)
 
 all: $(TARGET)
 	@echo "success"
