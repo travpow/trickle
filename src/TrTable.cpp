@@ -46,11 +46,16 @@ void TrTable::insert(const vector<Cell>& cells)
 void TrTable::removeByPrimaryKey(const Cell& primaryKey)
 {
     int primaryPos = schema_.pos(schema_.primaryKey());
-    auto primaryIndex = indices_[schema_.primaryKey()];
 
-    auto itr = primaryIndex.find(primaryKey);
+    auto* primaryIndex = getIndex(schema_.primaryKey());
+    if (!primaryIndex)
+    {
+        return;
+    }
 
-    if (itr == primaryIndex.end())
+    auto itr = primaryIndex->find(primaryKey);
+
+    if (itr == primaryIndex->end())
     {
         TRERROR << "Asked to remove a row by primary key that could not be found [" << primaryKey
             << ']' <<  endl;
@@ -60,7 +65,7 @@ void TrTable::removeByPrimaryKey(const Cell& primaryKey)
 
     // Keep a ptr to the found row
     shared_ptr<TrRow> row = itr->second.front();
-    primaryIndex.erase(itr);
+    const_cast<Index<Tr::Cell, TrRow>*>(primaryIndex)->erase(itr);
 
     static const char* timeIndex = "(timestamp)";
     removeRowFromIndex(timeIndex, rows_, row, row->timestamp());
@@ -119,22 +124,32 @@ const list<shared_ptr<TrRow> >& TrTable::getByIndex(const string& indexName, con
 {
     static const list<shared_ptr<TrRow> > emptyList;
 
-    auto itr = indices_.find(indexName);
-
-    if (itr == indices_.end())
+    auto* index= getIndex(indexName);
+    if (!index)
     {
-        TRERROR << "Index not found [" << indexName << ']' << endl;
         return emptyList;
     }
 
-    auto lookup = itr->second.find(value);
-
-    if (lookup == itr->second.end())
+    auto lookup = index->find(value);
+    if (lookup == index->end())
     {
         return emptyList;
     }
 
     return lookup->second;
+}
+
+const TrTable::Index<Tr::Cell, TrRow>* TrTable::getIndex(const std::string& indexName) const
+{
+    auto itr = indices_.find(indexName);
+
+    if (itr == indices_.end())
+    {
+        TRERROR << "Index not found [" << indexName << ']' << endl;
+        return nullptr;
+    }
+
+    return &itr->second;
 }
 
 void TrTable::addView(TrView* view)

@@ -26,11 +26,13 @@ public:
 
     void insert(const std::vector<Tr::Cell>& row);
     void removeByPrimaryKey(const Tr::Cell& primaryKey);
-    const std::list<std::shared_ptr<TrRow> >& getByIndex(const std::string& indexName, const Tr::Cell& value);
+    const RowList<TrRow>& getByIndex(const std::string& indexName, const Tr::Cell& value);
 
     void addView(TrView* view);
 
 private:
+    friend class TrView;
+
     const TrSchema& schema_;
     std::set<std::string> indiceNames_;
 
@@ -40,8 +42,11 @@ private:
     std::set<TrPipeline*> downstream_;
     std::set<TrView*> views_;
 
+    const Index<Tr::Cell, TrRow>* getIndex(const std::string& indexName) const;
+
     template <typename Key>
-    void removeRowFromIndex(const std::string& indexName, Index<Key, TrRow>& index, const std::shared_ptr<TrRow>& row, const Key& key);
+    void removeRowFromIndex(const std::string& indexName, Index<Key, TrRow>& index,
+        const std::shared_ptr<TrRow>& row, const Key& key);
 };
 
 #endif // TRTABLE_HPP

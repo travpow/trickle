@@ -32,7 +32,7 @@ TrSchema::TrSchema(const TypeDefinitions& types, const vector<pair<string, strin
 
     if (columns_.find(primaryKey) == columns_.end())
     {
-        TRERROR << "Invalid primary key [" << primaryKey << " not a column in the column list!" << endl;
+        TRERROR << "Invalid primary key [" << primaryKey << "] not a column in the column list!" << endl;
     }
 }
 

@@ -21,6 +21,7 @@ SRCS_F = \
 TESTSRCS_F = \
     test_main.cpp \
     test_Table.cpp \
+    test_View.cpp \
     test_initialize.cpp \
 
 SRCS = $(addprefix $(SRCDIR)/,$(SRCS_F))

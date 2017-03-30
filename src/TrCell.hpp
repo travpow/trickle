@@ -42,6 +42,11 @@ public:
             *value_ == *rhs.value_;
     }
 
+    operator bool() const
+    {
+        return !!value_;
+    }
+
     std::ostream& write(std::ostream& stream) const
     {
         return value_ ? value_->write(stream) : (stream << "(null)");
