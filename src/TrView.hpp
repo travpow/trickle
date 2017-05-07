@@ -6,6 +6,7 @@
 #include "TrTable.hpp"
 #include "TrRow.hpp"
 #include "TrViewDelegate.hpp"
+#include "TrOp.hpp"
 
 class TrView
 {
@@ -17,11 +18,12 @@ public:
 
     /**
      * @param row the row that was inserted into the table view
-     * @param keyIndex
+     * @param keyIndex for this particular row, the nth element in the index
+     * @param type of operation, insertion, removal, or replacement
      * @return -1 if the row is prior to the beginning, 0 if the row is in the view,
                and 1 if the row is after the end of the view.
      */
-    int provideInRange(const TrRow& row, int keyIndex) const;
+    int provideInRange(const TrRow& row, int keyIndex, Tr::Op::Value operation) const;
     void snap();
     int size() const;
 

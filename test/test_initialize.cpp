@@ -14,7 +14,7 @@ using std::pair;
 using std::string;
 using Tr::TypeDefinitions;
 
-TEST_CASE("asdf") {
+TEST_CASE("Test initialize schema") {
     TrResources resources;
     TypeDefinitions types = resources.typeFactory()->createTypes();
 
@@ -29,7 +29,7 @@ TEST_CASE("asdf") {
     TrSchema schema(types, columns, "name");
 
     REQUIRE(schema.pos("birthday") == 3);
-    REQUIRE(schema.type("birthday") == types.map["date"]);
+    REQUIRE(types.map["date"].get() == schema.type("birthday"));
     REQUIRE(schema.pos("badcol") == -1);
     REQUIRE(schema.type("badcol")->name() == "none");
 }

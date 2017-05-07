@@ -44,7 +44,7 @@ const Tr::Type* TrSchema::type(const string& column) const
         return &Tr::NoneType;
     }
 
-    return itr->second;
+    return itr->second.get();
 }
 
 int TrSchema::pos(const string& column) const

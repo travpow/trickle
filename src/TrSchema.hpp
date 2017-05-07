@@ -7,6 +7,7 @@
 #include <utility>
 #include <vector>
 #include <map>
+#include <memory>
 #include "TrType.hpp"
 
 class TrSchema
@@ -20,7 +21,7 @@ public:
     int pos(const std::string& column) const;
     const std::string& primaryKey() const;
 private:
-    std::map<std::string, const Tr::Type*> columns_;
+    std::map<std::string, std::shared_ptr<const Tr::Type> > columns_;
     std::map<std::string, int> pos_;
     std::string primaryKey_;
 };

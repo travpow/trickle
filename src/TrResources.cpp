@@ -6,11 +6,6 @@
 using Tr::TypeFactory;
 
 TrResources::TrResources()
-    : typeFactory_(new TypeFactory(this))
+    : typeFactory_(std::make_shared<Tr::TypeFactory>(*this))
 {
-}
-
-const Tr::TypeFactory* TrResources::typeFactory() const
-{
-    return typeFactory_;
 }

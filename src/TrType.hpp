@@ -4,6 +4,7 @@
 
 #include <map>
 #include <string>
+#include <memory>
 #include <vector>
 
 class TrResources;
@@ -26,11 +27,10 @@ public:
 
 private:
     const std::string name_;
-
 };
 
-using TypeMap = std::map<std::string, Type*>;
-using TypeList = std::vector<Type*>;
+using TypeMap = std::map<std::string, std::shared_ptr<Type> >;
+using TypeList = std::vector<std::shared_ptr<Type> >;
 
 struct TypeDefinitions
 {
@@ -39,15 +39,13 @@ struct TypeDefinitions
 
     ~TypeDefinitions()
     {
-        for (auto itr = list.begin(); itr != list.end(); ++itr)
-        {
-            delete *itr;
-        }
+        map.clear();
+        list.clear();
     }
 
     void addType(const char* name)
     {
-        Type* type = new Type(name);
+        auto type = std::make_shared<Type>(name);
         map[name] = type;
         list.push_back(type);
     }
@@ -58,7 +56,7 @@ static Type NoneType("none");
 class TypeFactory
 {
 public:
-    TypeFactory(TrResources* resources)
+    TypeFactory(TrResources& resources)
         : resources_(resources)
     {
     }
@@ -77,7 +75,7 @@ public:
     }
 
 private:
-    TrResources* resources_;
+    TrResources& resources_;
 };
 
 } // Tr

@@ -1,14 +1,14 @@
 
 include std_makevars
 
-TARGET = libtrickle.so
-TEST = test_trickle
-
 DIR = $(shell pwd)
 BIN = bin
 SRCDIR = src
 TESTDIR = test
 TESTBIN = $(TESTDIR)/$(BIN)
+
+TARGET = libtrickle.so
+TEST = $(TESTBIN)/test_trickle
 
 SRCS_F = \
     TrSchema.cpp \
@@ -45,13 +45,13 @@ $(TARGET): $(SRCS) | $(BIN)
 	@$(CXX) $(SHAREDFLAGS) -o $(BIN)/$(TARGET) -I$(SRCDIR) $(SRCS)
 
 $(TEST): $(TESTSRCS) | $(TESTBIN)
-	@$(CXX) -g -o $(TESTBIN)/$(TEST) $(TESTSRCS) -I$(SRCDIR) -L$(DIR)/$(BIN) -ltrickle
+	@$(CXX) -g -o $(TEST) $(TESTSRCS) -I$(SRCDIR) -L$(DIR)/$(BIN) -ltrickle
 
 clean:
 	@find $(DIR) -name $(BIN) -exec rm -r {} \; 2>/dev/null || true ;
 
 test: $(TARGET) $(TEST) | $(CATCH)
-	@./$(TESTBIN)/$(TEST)
+	@./$(TEST)
 
 all: $(TARGET)
 	@echo "success"

@@ -2,19 +2,24 @@
 #ifndef TRRESOURCES_HPP
 #define TRRESOURCES_HPP
 
+#include <memory>
+
 namespace Tr {
     class TypeFactory;
 }
 
 class TrResources
 {
-public: 
-    TrResources(); 
+public:
+    TrResources();
 
-    const Tr::TypeFactory* typeFactory() const;
+    std::shared_ptr<Tr::TypeFactory> typeFactory() const
+    {
+        return typeFactory_;
+    }
 
 private:
-    Tr::TypeFactory* typeFactory_;
+    std::shared_ptr<Tr::TypeFactory> typeFactory_;
 };
 
 #endif // TRRESOURCES_HPP

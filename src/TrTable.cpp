@@ -124,7 +124,7 @@ const list<shared_ptr<const TrRow> >& TrTable::getByIndex(const string& indexNam
 {
     static const list<shared_ptr<const TrRow> > emptyList;
 
-    auto* index= getIndex(indexName);
+    auto index = getIndex(indexName);
     if (!index)
     {
         return emptyList;

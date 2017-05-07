@@ -3,6 +3,9 @@
 #include <iostream>
 #include <memory>
 #include "TrRow.hpp"
+#include "TrLog.hpp"
+
+using std::endl;
 
 class TestViewDelegate : public TrViewDelegate
 {
@@ -15,7 +18,7 @@ public:
 
     virtual void append(const TrRow& row)
     {
-        std::cout << "TestViewDelegate: " << row << std::endl;
+        TRDEBUG << "TestViewDelegate: " << row << endl;
         rows_.push_back(row);
     }
 
